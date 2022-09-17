@@ -14,17 +14,16 @@ app.use('/api', api);
 
 app.use(express.static('public'));
 
-
+// GET Route for homepage
+// app.get('/', (req, res) =>
+//   res.sendFile(path.join(__dirname, '/public/index.html'))
+// );
 
 // GET Route for notes page
-app.get('/notes', (req, res) =>
+app.get('/notes', (req, res) =>{
+  console.log("SENDING GET REQUEST");
   res.sendFile(path.join(__dirname, '/public/notes.html'))
-);
-
-// Wildcard route to direct users to a index page
-app.get('*', (req, res) =>
-  res.sendFile(path.join(__dirname, 'public/index.html'))
-);
+});
 
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} 🚀`)
