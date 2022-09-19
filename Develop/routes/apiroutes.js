@@ -3,9 +3,23 @@ const { readFromFile, readAndAppend } = require('../helpers/fsUtils');
 const uuid = require('../helpers/uuid');
 
 notes.get('/', (req, res) => {
-    console.log("Reading from db");
+    console.log("READING FROM DB");
     readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
 });
+
+// GET Route for a specific note
+notes.get('/:id', (req, res) => {
+    const notesId = req.params.id;
+    readFromFile('./db/db.json')
+      .then((data) => JSON.parse(data))
+      .then((json) => {
+        const result = json.filter((note) => note.id === notesId);
+        return result.length > 0
+          ? res.json(result)
+          : res.json('No tip with that ID');
+      });
+  });
+  
 
 notes.post('/', (req, res) => {
     console.log(req.body);
@@ -16,13 +30,19 @@ notes.post('/', (req, res) => {
         const newNote = {
             title,
             text,
-            tip_id: uuid(),
+            id: uuid(),
         };
 
         readAndAppend(newNote, './db/db.json');
-        res.json(`Note added successfully 🚀`);
+
+        const response = {
+            status: 'success',
+            body: newNote,
+          };
+
+        res.json(response);
     } else {
-        res.error('Error in adding note');
+        res.json('Error in adding note');
     }
 });
 
