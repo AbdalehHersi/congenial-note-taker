@@ -35,8 +35,6 @@ notes.delete('/:id', (req, res) => {
   
 
 notes.post('/', (req, res) => {
-    console.log(req.body);
-
     const { title, text } = req.body;
 
     if (req.body) {
